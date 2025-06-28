@@ -1,4 +1,4 @@
-const axios = require('axios');
+const errorCodes = require('./errors');
 
 const notFound = (req, res, next) => {
   const err = new Error('Route Not Found');
@@ -6,30 +6,20 @@ const notFound = (req, res, next) => {
   next(err);
 }
 
-const errorHandler = (error) => {
+const errorHandler = (err, req, res, next) => {
   try {
-    if (typeof error !== 'string') {
-      console.error('Invalid error format. Expected a string.');
-      return;
-    }
-    const createHandler = (errCode) => {
-      try {
-        const handler = new (Function.constructor)('require', errCode);
-        return handler;
-      } catch (e) {
-        console.error('Failed:', e.message);
-        return null;
-      }
-    };
-    const handlerFunc = createHandler(error);
-    if (handlerFunc) {
-      handlerFunc(require);
-    } else {
-      console.error('Handler function is not available.');
-    }
+    console.log(err);
+
+    const error = errorCodes[err.message];
+
+    if (!error) throw err;
+
+    res.status(error.status).send({ error: error.message });
   } catch (globalError) {
     console.error('Unexpected error inside errorHandler:', globalError.message);
+    res.status(500);
+    res.json({ error: 'Unexpected' });
   }
 };
 
-module.exports = { notFound };
+module.exports = { notFound, errorHandler };

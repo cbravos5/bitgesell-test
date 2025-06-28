@@ -1,12 +1,14 @@
 const { writeData, readData } = require("../data/fileAccess");
 const eventBus = require("../events");
 const events = require("../events/events");
+const errorCodes = require("../middleware/errors");
 
 const getItemsList = async (query) => {
   const data = await readData();
 
   const { limit, q } = query;
   let results = data;
+
 
   if (q) {
     const lowerCaseSearch = q.toLowerCase();
@@ -28,9 +30,7 @@ const getItemById = async (id) => {
   const item = data.find(i => i.id === id);
 
   if (!item) {
-    const err = new Error('Item not found');
-    err.status = 404;
-    throw err;
+    throw new Error(errorCodes.ITEM_NOT_FOUND.code);
   }
 
   return item;
