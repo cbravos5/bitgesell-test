@@ -1,10 +1,10 @@
 const express = require('express');
-const path = require('path');
 const morgan = require('morgan');
 const itemsRouter = require('./routes/items');
 const statsRouter = require('./routes/stats');
 const cors = require('cors');
-const { notFound } = require('./middleware/errorHandler');
+const { getCookie, notFound } = require('./middleware/errorHandler');
+require('./events/cache');
 
 const app = express();
 const port = process.env.PORT || 3001;

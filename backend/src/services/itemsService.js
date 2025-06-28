@@ -1,4 +1,6 @@
 const { writeData, readData } = require("../data/fileAccess");
+const eventBus = require("../events");
+const events = require("../events/events");
 
 const getItemsList = async (query) => {
   const data = await readData();
@@ -40,6 +42,8 @@ const createItem = async (item) => {
   data.push(item);
 
   await writeData(data);
+
+  eventBus.emit(events.newItem)
 
   return item;
 }
