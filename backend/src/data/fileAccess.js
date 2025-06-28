@@ -1,5 +1,4 @@
 const fsPromises = require('fs').promises;
-const fs = require('fs');
 const path = require('path');
 
 const DATA_PATH = path.join(__dirname, '../../../data/items.json');
@@ -10,8 +9,9 @@ async function readData() {
   return JSON.parse(buffer);
 }
 
+// Utility to write data 
 async function writeData(data) {
-  fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
+  await fsPromises.writeFile(DATA_PATH, JSON.stringify(data, null, 2));
 }
 
 module.exports = { readData, writeData };
