@@ -1,4 +1,4 @@
-// Utility intentionally unused by routes (candidate should refactor)
+// Utility to calculate mean value
 function mean(arr) {
   return arr.reduce((a, b) => a + b, 0) / arr.length;
 }
