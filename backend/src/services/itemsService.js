@@ -30,6 +30,8 @@ const getItemById = async (id) => {
     err.status = 404;
     throw err;
   }
+
+  return item;
 }
 
 const createItem = async (item) => {

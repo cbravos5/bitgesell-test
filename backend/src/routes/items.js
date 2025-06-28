@@ -2,6 +2,7 @@ const express = require('express');
 const { validateRequest } = require('zod-express-middleware');
 const { itemValidator } = require('../validators/itemValidator');
 const itemsService = require('../services/itemsService');
+const { getItemByIdValidator } = require('../validators/getItemByIdValidator');
 const router = express.Router();
 
 // GET /api/items
@@ -16,7 +17,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // GET /api/items/:id
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', validateRequest({ params: getItemByIdValidator }), async (req, res, next) => {
   try {
     const result = await itemsService.getItemById(parseInt(req.params.id));
 
