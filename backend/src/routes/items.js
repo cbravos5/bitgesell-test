@@ -1,25 +1,31 @@
 const express = require('express');
+const { validateRequest } = require('zod-express-middleware');
+const { itemValidator } = require('../validators/itemValidator');
 const fs = require('fs');
+const fsPromises = require('fs').promises;
 const path = require('path');
 const router = express.Router();
 const DATA_PATH = path.join(__dirname, '../../../data/items.json');
 
-// Utility to read data (intentionally sync to highlight blocking issue)
-function readData() {
-  const raw = fs.readFileSync(DATA_PATH);
-  return JSON.parse(raw);
+// Utility to read data 
+async function readData() {
+  const buffer = await fsPromises.readFile(DATA_PATH);
+  return JSON.parse(buffer);
 }
 
 // GET /api/items
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
-    const data = readData();
+    const data = await readData();
+
     const { limit, q } = req.query;
     let results = data;
 
     if (q) {
-      // Simple substring search (sub‑optimal)
-      results = results.filter(item => item.name.toLowerCase().includes(q.toLowerCase()));
+      const lowerCaseSearch = q.toLowerCase();
+
+      // Simple substring search
+      results = results.filter(item => item.name.toLowerCase().includes(lowerCaseSearch));
     }
 
     if (limit) {
@@ -49,11 +55,11 @@ router.get('/:id', (req, res, next) => {
 });
 
 // POST /api/items
-router.post('/', (req, res, next) => {
+router.post('/', validateRequest({ body: itemValidator }), async (req, res, next) => {
   try {
     // TODO: Validate payload (intentional omission)
     const item = req.body;
-    const data = readData();
+    const data = await readData();
     item.id = Date.now();
     data.push(item);
     fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
