@@ -1,14 +1,15 @@
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import Items from './Items';
 import ItemDetail from './ItemDetail';
 import { DataProvider } from '../state/DataContext';
+import styles from './styles.module.css';
+import Items from './Items';
 
 function App() {
   return (
     <DataProvider>
-      <nav style={{padding: 16, borderBottom: '1px solid #ddd'}}>
-        <Link to="/">Items</Link>
+      <nav className={styles.navBar}>
+        <Link to="/" className={styles.navItem}>Items</Link>
       </nav>
       <Routes>
         <Route path="/" element={<Items />} />

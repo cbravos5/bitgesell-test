@@ -1,0 +1,13 @@
+.navBar {
+  padding: 16px 24px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.navItem {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+  font-size: 18px;
+}

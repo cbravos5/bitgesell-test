@@ -7,7 +7,6 @@ const { notFound, errorHandler } = require('./middleware/errorHandler');
 require('./events/cache');
 
 const app = express();
-const port = process.env.PORT || 3001;
 
 app.use(cors({ origin: 'http://localhost:3000' }));
 

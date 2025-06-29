@@ -6,13 +6,13 @@ export function DataProvider({ children }) {
   const [items, setItems] = useState([]);
 
   const fetchItems = useCallback(async () => {
-    const res = await fetch('http://localhost:3001/api/items?limit=500'); // Intentional bug: backend ignores limit
+    const res = await fetch('http://localhost:3001/api/items?limit=500');
     const json = await res.json();
-    setItems(json);
+    return json;
   }, []);
 
   return (
-    <DataContext.Provider value={{ items, fetchItems }}>
+    <DataContext.Provider value={{ items, setItems, fetchItems }}>
       {children}
     </DataContext.Provider>
   );
