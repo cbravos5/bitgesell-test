@@ -3,6 +3,7 @@ const eventBus = require("../events");
 const events = require("../events/events");
 const errorCodes = require("../middleware/errors");
 
+// Retrieves list of items from file and apply query
 const getItemsList = async (query) => {
   const data = await readData();
 
@@ -24,6 +25,7 @@ const getItemsList = async (query) => {
   return results;
 }
 
+// Retrieves specified item by id
 const getItemById = async (id) => {
   const data = await readData();
 
@@ -36,6 +38,7 @@ const getItemById = async (id) => {
   return item;
 }
 
+// Create an item and write it to file
 const createItem = async (item) => {
   const data = await readData();
   item.id = Date.now();
