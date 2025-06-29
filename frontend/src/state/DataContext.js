@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
+import { httpClient } from '../services/httpClient';
 
 const DataContext = createContext();
 
@@ -6,9 +7,7 @@ export function DataProvider({ children }) {
   const [items, setItems] = useState([]);
 
   const fetchItems = useCallback(async ({ search }) => {
-    const params = new URLSearchParams({ q: search, limit: 500 });
-
-    const res = await fetch('http://localhost:3001/api/items?' + params.toString());
+     const res = await httpClient.get('/items', { q: search, limit: 500 });
     const json = await res.json();
     return json;
   }, []);

@@ -44,18 +44,20 @@ function Items() {
 
       <div className={styles.itemsContainer}>
         <ul className={styles.itemsList}>
-          {isLoading && Array.from({ length: 25 }).map((_, i) => (
-            <li key={i}>
-              <Skeleton height={52} />
-            </li>
-          ))}
-          {!isLoading && items.map((item) => (
-            <li key={item.id} className={`${styles.listItem} ${styles.itemAppear}`}>
-              <Link to={"/items/" + item.id} className={styles.listItemLink}>
-                {item.name}
+          {isLoading &&
+            Array.from({ length: 25 }).map((_, i) => (
+              <li key={i}>
+                <Skeleton height={52} />
+              </li>
+            ))}
+          {!isLoading &&
+            items.map((item) => (
+              <Link key={item.id} to={"/items/" + item.id} className={styles.listItemLink}>
+                <li  className={`${styles.listItem} ${styles.itemAppear}`}>
+                  {item.name}
+                </li>
               </Link>
-            </li>
-          ))}
+            ))}
         </ul>
       </div>
     </>
