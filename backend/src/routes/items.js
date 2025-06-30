@@ -3,10 +3,11 @@ const { validateRequest } = require('zod-express-middleware');
 const { itemValidator } = require('../validators/itemValidator');
 const itemsService = require('../services/itemsService');
 const { getItemByIdValidator } = require('../validators/getItemByIdValidator');
+const { getItemsValidator } = require('../validators/getItemsValidation');
 const router = express.Router();
 
 // GET /api/items
-router.get('/', async (req, res, next) => {
+router.get('/', validateRequest({ query: getItemsValidator }), async (req, res, next) => {
   try {
     const result = await itemsService.getItemsList(req.query);
   
