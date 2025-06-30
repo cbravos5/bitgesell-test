@@ -35,10 +35,19 @@ describe('Items tests', () => {
     expect(res.body).toEqual(mockedData)
   });
 
-  test('should apply filters in items list', async () => {
+  test('should apply search filter in items list', async () => {
     readData.mockResolvedValueOnce(mockedData)
     const res = await request(app)
       .get('/api/items?' + new URLSearchParams({ limit: 1, q: 'adjustable' }).toString());
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toEqual([mockedData[2]])
+  });
+
+  test('should apply pagination filter in items list', async () => {
+    readData.mockResolvedValueOnce(mockedData)
+    const res = await request(app)
+      .get('/api/items?' + new URLSearchParams({ limit: 1, page: 2 }).toString());
 
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual([mockedData[2]])

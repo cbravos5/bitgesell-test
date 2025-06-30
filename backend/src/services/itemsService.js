@@ -7,9 +7,8 @@ const errorCodes = require("../middleware/errors");
 const getItemsList = async (query) => {
   const data = await readData();
 
-  const { limit, q } = query;
+  const { limit = 40, page = 0, q } = query;
   let results = data;
-
 
   if (q) {
     const lowerCaseSearch = q.toLowerCase();
@@ -18,9 +17,10 @@ const getItemsList = async (query) => {
     results = results.filter(item => item.name.toLowerCase().includes(lowerCaseSearch));
   }
 
-  if (limit) {
-    results = results.slice(0, parseInt(limit));
-  }
+  const skip = parseInt(page) * parseInt(limit);
+  const take = (parseInt(page) + 1) * parseInt(limit);
+
+  results = results.slice(skip, take);
 
   return results;
 }
