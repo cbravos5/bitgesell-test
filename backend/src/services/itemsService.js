@@ -7,7 +7,7 @@ const errorCodes = require("../middleware/errors");
 const getItemsList = async (query) => {
   const data = await readData();
 
-  const { limit = 40, page = 0, q } = query;
+  let { limit = 40, page = 0, q } = query;
   let results = data;
 
   if (q) {
@@ -17,12 +17,18 @@ const getItemsList = async (query) => {
     results = results.filter(item => item.name.toLowerCase().includes(lowerCaseSearch));
   }
 
-  const skip = parseInt(page) * parseInt(limit);
-  const take = (parseInt(page) + 1) * parseInt(limit);
+  page = parseInt(page);
+  limit = parseInt(limit);
 
-  results = results.slice(skip, take);
+  const skip = page * limit;
+  const take = (page + 1) * limit;
 
-  return results;
+  results = results.slice(skip, take + 1); // +1 so we know if there are more pages
+  const hasNextPage = results.length > limit;
+
+  if (hasNextPage) results = results.slice(0, -1);
+
+  return { items: results, hasNextPage };
 }
 
 // Retrieves specified item by id

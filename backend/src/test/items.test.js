@@ -32,7 +32,7 @@ describe('Items tests', () => {
     readData.mockResolvedValueOnce(mockedData)
     const res = await request(app).get('/api/items')
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toEqual(mockedData)
+    expect(res.body.items).toEqual(mockedData)
   });
 
   test('should apply search filter in items list', async () => {
@@ -41,16 +41,16 @@ describe('Items tests', () => {
       .get('/api/items?' + new URLSearchParams({ limit: 1, q: 'adjustable' }).toString());
 
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toEqual([mockedData[2]])
+    expect(res.body.items).toEqual([mockedData[2]])
   });
 
   test('should apply pagination filter in items list', async () => {
     readData.mockResolvedValueOnce(mockedData)
     const res = await request(app)
-      .get('/api/items?' + new URLSearchParams({ limit: 1, page: 2 }).toString());
+      .get('/api/items?' + new URLSearchParams({ limit: 1, page: 1 }).toString());
 
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toEqual([mockedData[2]])
+    expect(res.body).toEqual({ items: [mockedData[1]], hasNextPage: true });
   });
 
   test('should return specified item by id', async () => {
