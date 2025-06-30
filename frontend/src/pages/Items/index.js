@@ -92,8 +92,9 @@ function Items() {
         height={800}
         itemCount={isLoading ? 25 : items.length}
         itemSize={ITEM_HEIGHT}
-        className={styles.itemsList}
+        className={`${styles.itemsList} virtual-scroll`}
         onItemsRendered={({ visibleStopIndex }) => {
+          // tracks bottom of scroll to trigger next page
           if (
             visibleStopIndex >= items.length - 1 &&
             !isLoading &&
